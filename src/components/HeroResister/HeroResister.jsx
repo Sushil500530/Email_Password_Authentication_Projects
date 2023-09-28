@@ -1,3 +1,5 @@
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import auth from "../../firebase/Firebase";
 
 const HeroResister = () => {
     const handleResister = (e)=>{
@@ -5,6 +7,13 @@ const HeroResister = () => {
         const emailField = e.target.email.value ;
         const passwordField = e.target.password.value ;
         console.log(emailField,passwordField);
+        createUserWithEmailAndPassword(auth,emailField,passwordField)
+        .then(result => {
+            console.log(result);
+        })
+        .catch(error =>{
+            console.error(error);
+        })
     }
     return (
         <div>
