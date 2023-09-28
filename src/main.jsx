@@ -7,6 +7,7 @@ import Root from './components/Root';
 import Home from './components/Home/Home';
 import Login from './components/Login/Login';
 import Resister from './components/Resister/Resister';
+import HeroResister from './components/HeroResister/HeroResister';
 
 
 const router = createBrowserRouter([
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path:'/resister',
         element:<Resister></Resister>
+      },
+      {
+        path:'/heroResister',
+        element:<HeroResister></HeroResister>
       }
     ]
   }
