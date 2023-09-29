@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth";
 import auth from "../../firebase/Firebase";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
@@ -11,10 +11,11 @@ const Resister = () => {
 
     const handleResister = (e) => {
         e.preventDefault()
+        const name = e.target.name.value ;
         const email = e.target.email.value;
         const password = e.target.password.value;
         const acceptedTerms = e.target.terms.checked ;
-        console.log(acceptedTerms);
+        console.log(name,email,password,acceptedTerms);
         // reset error
         setErrorCatch('');
         setSuccessShow('');
@@ -35,7 +36,26 @@ const Resister = () => {
         createUserWithEmailAndPassword(auth, email, password)
             .then(Result => {
                 console.log(Result.user);
-                setSuccessShow('user created successfully')
+                setSuccessShow('user created successfully') ;
+                //update profile's 
+                updateProfile(Result.user,{
+                    displayName:name,
+                    photoURL:"https://example.com/jane-q-user/profile.jpg"
+                })
+                .then(() =>{
+                    console.log("Profile Updated!");
+                })
+                .catch(error => {
+                    console.error(error);
+                })
+                // send veification email 
+                sendEmailVerification(Result.user)
+                .then(()=> {
+                    alert("please check your email and verify your account!")
+                })
+                .catch(error => {
+                    console.error(error);
+                })
             })
             .catch(error => {
                 setErrorCatch(error.message)
@@ -48,6 +68,7 @@ const Resister = () => {
             <div className="bg-gray-400 w-1/2 mx-auto p-6 mt-5">
                 <h2 className="text-3xl font-bold text-center">Please Resister</h2>
                 <form onSubmit={handleResister} className="flex flex-col mt-6">
+                    <input required type="text" placeholder="Your Name" name="name" className="input input-bordered input-info w-full block" /> <br></br>
                     <input required type="email" placeholder="Email" name="email" className="input input-bordered input-info w-full block" /> <br></br>
 
                     <div className="flex relative w-full ">
@@ -57,7 +78,7 @@ const Resister = () => {
                             className="input input-bordered input-info block w-full" />
                         <span onClick={() => setShowPassword(!showPassword)} className="absolute top-0 right-0 p-3 text-xl font-medium cursor-pointer">
                             {
-                                showPassword ? <FaEye></FaEye> : <FaEyeSlash></FaEyeSlash>
+                                showPassword ? <FaEyeSlash></FaEyeSlash> : <FaEye></FaEye> 
                             }
                         </span>
                     </div>
