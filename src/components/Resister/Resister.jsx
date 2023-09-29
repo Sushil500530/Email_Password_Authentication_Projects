@@ -2,6 +2,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import auth from "../../firebase/Firebase";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { Link } from "react-router-dom";
 
 const Resister = () => {
     const [errorCatch, setErrorCatch] = useState('');
@@ -75,6 +76,8 @@ const Resister = () => {
                 {
                     successShow && <p className="text-xl text-green-800">{successShow}</p>
                 }
+                {/* jodi age thekei account khula thake tahle */}
+                <p className="my-5">You have already an account?  <Link to="/login" className="text-blue-500">Please Login</Link></p>
             </div>
         </div>
     );
