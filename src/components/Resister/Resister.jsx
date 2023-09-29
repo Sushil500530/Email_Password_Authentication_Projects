@@ -1,11 +1,12 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import auth from "../../firebase/Firebase";
 import { useState } from "react";
-
+import {FaEye,FaEyeSlash } from 'react-icons/fa';
 
 const Resister = () => {
     const [errorCatch, setErrorCatch] = useState('');
     const [successShow, setSuccessShow] = useState('');
+    const [showPassword,setShowPassword] = useState(false) ;
 
     const handleResister = (e) => {
         e.preventDefault()
@@ -16,6 +17,10 @@ const Resister = () => {
         setSuccessShow('');
         if (password.length < 6) {
             setErrorCatch('Password should be at least 6 characters or longer!')
+            return;
+        }
+        else if (!/[A-Z]/.test(password)) {
+            setErrorCatch("your password should have at least one uppercase characters.")
             return;
         }
 
@@ -37,8 +42,20 @@ const Resister = () => {
             <div className="bg-gray-400 w-1/2 mx-auto p-6 mt-5">
                 <h2 className="text-3xl font-bold text-center">Please Resister</h2>
                 <form onSubmit={handleResister} className="flex justify-center items-center flex-col mt-6">
-                    <input required type="email" placeholder="Email" name="email" className="input input-bordered input-info w-full max-w-xs block" /> <br></br>
-                    <input type="password" placeholder="Password" name="password" required className="input input-bordered input-info block w-full max-w-xs" />
+                    <input required type="email" placeholder="Email" name="email" className="input input-bordered input-info w-full block" /> <br></br>
+                  
+                   <div className="flex relative w-full ">
+                   <input type={showPassword ? "text" : "password"}
+                    placeholder="Password" 
+                    name="password" required 
+                    className="input input-bordered input-info block w-full" />
+                    <span onClick={()=>setShowPassword(!showPassword)} className="absolute top-0 right-0 p-3 text-xl font-medium cursor-pointer">
+                    {
+                        showPassword ? <FaEye></FaEye> : <FaEyeSlash></FaEyeSlash>
+                    }
+                    </span>
+                   </div>
+                    
                     <button className="btn bg-green-500 text-xl font-medium text-white hover:bg-transparent hover:border-green-500 hover:text-green-800 transition mt-5 ease-in">Resister</button>
                 </form>
                 {
